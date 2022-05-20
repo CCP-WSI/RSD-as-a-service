@@ -1,21 +1,27 @@
-import {useEffect} from 'react'
+
+import {Session} from '~/auth'
 
 import ContentLoader from '~/components/layout/ContentLoader'
 import EditSection from '~/components/layout/EditSection'
 import EditSectionTitle from '~/components/layout/EditSectionTitle'
+import {clasifyMentionsByType} from '~/utils/editMentions'
 import useProjectContext from '../useProjectContext'
+import useImpactForProject from './useImpactForProject'
+import DefaultMentionsByType from '../DefaultMentionsByType'
 
-export default function ProjectTeam() {
-  const {loading, setLoading} = useProjectContext()
+export default function ProjectImpact({session}:{session:Session}) {
+  const {project} = useProjectContext()
+  const {impact, loading} = useImpactForProject({
+    project: project.id,
+    token: session.token
+  })
 
-  useEffect(() => {
-    let abort = false
-    setTimeout(() => {
-      if (abort) return
-      if (loading) setLoading(false)
-    }, 1000)
-    return ()=>{abort=true}
-  },[loading,setLoading])
+  const {mentionByType} = clasifyMentionsByType(impact)
+
+  console.group('ProjectImpact')
+  console.log('impact...', impact)
+  console.log('mentionByType...', mentionByType)
+  console.groupEnd()
 
   if (loading) {
     return (
@@ -24,15 +30,20 @@ export default function ProjectTeam() {
   }
 
   return (
-    <EditSection className='xl:grid xl:grid-cols-[3fr,1fr] xl:px-0 xl:gap-[3rem]'>
+    <EditSection className='xl:grid xl:grid-cols-[1fr,1fr] xl:px-0 xl:gap-[3rem]'>
       <div className="py-4 xl:pl-[3rem]">
         <EditSectionTitle
           title="Impact"
+        >
+          <span>{impact.length ?? 0}</span>
+        </EditSectionTitle>
+        <div className="py-4"></div>
+        <DefaultMentionsByType
+          mentionByType={mentionByType}
         />
-        <h2>Under construction</h2>
       </div>
       <div className="py-4 min-w-[21rem] xl:my-0">
-
+        <h2>Find mention</h2>
       </div>
     </EditSection>
   )

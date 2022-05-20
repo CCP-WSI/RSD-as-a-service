@@ -1,21 +1,21 @@
-import {useEffect} from 'react'
 
+import {Session} from '~/auth'
 import ContentLoader from '~/components/layout/ContentLoader'
 import EditSection from '~/components/layout/EditSection'
 import EditSectionTitle from '~/components/layout/EditSectionTitle'
+import {clasifyMentionsByType} from '~/utils/editMentions'
+import DefaultMentionsByType from '../DefaultMentionsByType'
 import useProjectContext from '../useProjectContext'
+import useOutputForProject from './useOutputForProject'
 
-export default function ProjectTeam() {
-  const {loading, setLoading} = useProjectContext()
+export default function ProjectOutput({session}:{session:Session}) {
+  const {project} = useProjectContext()
+  const {output, loading} = useOutputForProject({
+    project: project.id,
+    token: session.token
+  })
 
-  useEffect(() => {
-    let abort = false
-    setTimeout(() => {
-      if (abort) return
-      if (loading) setLoading(false)
-    }, 1000)
-    return ()=>{abort=true}
-  },[loading,setLoading])
+  const {mentionByType} = clasifyMentionsByType(output)
 
   if (loading) {
     return (
@@ -29,10 +29,13 @@ export default function ProjectTeam() {
         <EditSectionTitle
           title="Output"
         />
-        <h2>Under construction</h2>
+        <div className="py-4"></div>
+        <DefaultMentionsByType
+          mentionByType={mentionByType}
+        />
       </div>
       <div className="py-4 min-w-[21rem] xl:my-0">
-
+        <h2>Find mention</h2>
       </div>
     </EditSection>
   )
