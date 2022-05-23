@@ -6,11 +6,11 @@ import {
 import SaveIcon from '@mui/icons-material/Save'
 import {useForm} from 'react-hook-form'
 
-import ControlledTextField from '../../../form/ControlledTextField'
-import ControlledDropdown from '../../../form/ControlledDropdown'
-import ControlledSwitch from '../../../form/ControlledSwitch'
-import {mentionInformation as config} from '../editSoftwareConfig'
-import {MentionItem, mentionType,MentionType} from '../../../../types/Mention'
+import ControlledTextField from '../../form/ControlledTextField'
+import ControlledDropdown from '../../form/ControlledDropdown'
+import ControlledSwitch from '../../form/ControlledSwitch'
+import {mentionInformation as config} from '../../software/edit/editSoftwareConfig'
+import {MentionItem, mentionType,MentionTypeKeys} from '../../../types/Mention'
 
 type EditMentionModalProps = {
   open: boolean,
@@ -22,7 +22,7 @@ type EditMentionModalProps = {
 }
 
 const mentionTypeOptions = Object.keys(mentionType).map(key => {
-  const type = mentionType[key as MentionType]
+  const type = mentionType[key as MentionTypeKeys].singular
   return {
     key: key,
     label: type,
@@ -96,11 +96,10 @@ export default function NewMentionModal({open, onCancel, onSubmit, mention, pos}
             <ControlledTextField
               control={control}
               options={{
-                name: 'date',
-                type: 'date',
+                name: 'publication_year',
                 label: config.date.label,
                 useNull: true,
-                defaultValue: mention?.date ?? new Date().toISOString().split('T')[0],
+                defaultValue: mention?.publication_year ?? new Date().getFullYear().toString(),
                 helperTextMessage: config.date.help,
                 // helperTextCnt: `${formData?.message?.length || 0}/${config.message.validation.maxLength.value}`,
               }}
@@ -127,7 +126,7 @@ export default function NewMentionModal({open, onCancel, onSubmit, mention, pos}
               name: 'author',
               label: config.author.label,
               useNull: true,
-              defaultValue: mention?.author,
+              defaultValue: mention?.authors,
               helperTextMessage: config.author.help
             }}
             rules={config.author.validation}
@@ -158,7 +157,7 @@ export default function NewMentionModal({open, onCancel, onSubmit, mention, pos}
                 name: 'image',
                 label: config.image_url.label,
                 useNull: true,
-                defaultValue: mention?.image,
+                defaultValue: mention?.image_url,
                 helperTextMessage: config.image_url.help,
               }}
               rules={config.image_url.validation}

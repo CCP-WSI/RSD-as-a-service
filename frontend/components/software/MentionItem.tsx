@@ -12,7 +12,7 @@ export default function MentionItem({item, pos}: {item: MentionForSoftware, pos:
         <div className="min-w-[1rem]">{pos}.</div>
         <div className='pl-4 flex-1'>
           <div>{item.title}</div>
-          <div>{isoStrToLocalDateStr(item.date)}</div>
+          <div>{isoStrToLocalDateStr(item.publication_year ?? '')}</div>
         </div>
         <div className="flex justify-center items-center">
           {item?.url ? <LinkIcon /> : null}

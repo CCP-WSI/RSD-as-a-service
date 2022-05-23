@@ -1,28 +1,28 @@
 import {createContext} from 'react'
+import {MentionTypeKeys} from '~/types/Mention'
 
-export const initialCount = {
-  attachment: 0,
+export const initialCount:MentionCountByType = {
   blogPost: 0,
   book: 0,
   bookSection: 0,
   computerProgram: 0,
   conferencePaper: 0,
-  document:0,
+  dataset:0,
   interview: 0,
   journalArticle:0,
   magazineArticle:0,
-  manuscript:0,
   newspaperArticle:0,
-  note:0,
   presentation:0,
-  radioBroadcast:0,
   report:0,
   thesis:0,
   videoRecording:0,
-  webpage:0,
+  webpage: 0,
+  other: 0
 }
 
-export type MentionCountByType = typeof initialCount
+export type MentionCountByType = {
+  [key in MentionTypeKeys]?: number
+}
 
 export type MentionCountContextProps = {
   mentionCount: MentionCountByType | undefined,

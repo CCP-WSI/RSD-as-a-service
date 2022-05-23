@@ -1,7 +1,7 @@
 import {useContext, useState, useEffect} from 'react'
 
 import useSnackbar from '../../../snackbar/useSnackbar'
-import {MentionEditType, MentionForSoftware, MentionItem, mentionType} from '../../../../types/Mention'
+import {MentionForSoftware, MentionItem, MentionType, mentionType, MentionTypeKeys} from '../../../../types/Mention'
 import {addMentionToSoftware} from '../../../../utils/editMentions'
 // import logger from '../../../../utils/logger'
 import {getMentionsForSoftwareOfType} from '../../../../utils/editMentions'
@@ -19,7 +19,7 @@ import SoftwareMentionCategories from './SoftwareMentionCategories'
 import SoftwareMentionList from './SoftwareMentionList'
 
 type MentionByTypeState = {
-  category: MentionEditType,
+  category: MentionTypeKeys,
   items: MentionForSoftware[]
 }
 
@@ -57,9 +57,9 @@ export default function EditSoftwareMentions({token}:{token: string}) {
         token
       })
       if (resp.status === 200) {
-        if (mention?.type) {
-          await loadCategory(mention.type as MentionEditType)
-          showSuccessMessage(`Added mention to ${mentionType[mention.type]}`)
+        if (mention?.mention_type) {
+          await loadCategory(mention.mention_type as MentionTypeKeys)
+          showSuccessMessage(`Added mention to ${mentionType[mention.mention_type].singular}`)
         } else{
           showSuccessMessage(`Added mention to ${software.brand_name}`)
         }
@@ -69,7 +69,7 @@ export default function EditSoftwareMentions({token}:{token: string}) {
     }
   }
 
-  async function loadCategory(category: MentionEditType | undefined) {
+  async function loadCategory(category: MentionTypeKeys | undefined) {
     // ignore request if category not provided
     if (typeof category == 'undefined') return
     // start request
@@ -116,7 +116,7 @@ export default function EditSoftwareMentions({token}:{token: string}) {
               title={config.sectionTitle}
             />
             <SoftwareMentionCategories
-              category={mentions?.category ?? 'attachment'}
+              category={mentions?.category ?? 'other' as MentionTypeKeys}
               onCategoryChange={loadCategory}
             />
           </div>
@@ -133,14 +133,13 @@ export default function EditSoftwareMentions({token}:{token: string}) {
             <div className="py-4"></div>
             <div className="flex-1 py-2">
               <EditSectionTitle
-                title={mentionType[mentions?.category ?? 'attachment']}
+                title={mentionType[mentions?.category ?? 'other'].plural}
               />
               <div className="py-2"></div>
               {loading ?
                 <ContentLoader />
                 :
                 <SoftwareMentionList
-                  category={mentions?.category ?? 'attachment'}
                   items={mentions?.items ?? []}
                   token={token}
                   onDelete={() => loadCategory(mentions?.category)}

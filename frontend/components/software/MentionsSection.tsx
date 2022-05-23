@@ -12,7 +12,10 @@ export default function SoftwareMentionsSection({mentions}: { mentions: MentionF
   if (!mentions || mentions.length === 0) return null
   // split to featured and (not featured) mentions by type (different presentation)
   const {mentionByType, featuredMentions} = clasifyMentionsByType(mentions)
-
+  // console.group('SoftwareMentionsSection')
+  // console.log('mentionByType...', mentionByType)
+  // console.log('featuredMentions...', featuredMentions)
+  // console.groupEnd()
   return (
     <DarkThemeSection>
       <PageContainer className="py-12 px-4 lg:grid lg:grid-cols-[1fr,4fr]">
@@ -23,7 +26,7 @@ export default function SoftwareMentionsSection({mentions}: { mentions: MentionF
         </h2>
         <section>
           {featuredMentions
-            .sort((a,b)=>sortOnDateProp(a,b,'date','desc'))
+            .sort((a,b)=>sortOnDateProp(a,b,'publication_year','desc'))
             .map(item => {
             return (
               <MentionIsFeatured key={item.url} mention={item} />

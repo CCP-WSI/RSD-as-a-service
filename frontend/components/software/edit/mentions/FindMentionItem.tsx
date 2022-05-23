@@ -1,34 +1,34 @@
-import {mentionTypeSingular,MentionItem, MentionEditType} from '../../../../types/Mention'
+import {mentionType, MentionTypeKeys, MentionItem} from '../../../../types/Mention'
 import {isoStrToLocalDateStr} from '../../../../utils/dateFn'
 
 export default function FindMentionItem({mention}: { mention: MentionItem }) {
 
   function renderDateAndAuthor() {
-    if (mention.date && mention.author) {
+    if (mention.publication_year && mention.authors) {
       return (
         <>
           <div>
-            {isoStrToLocalDateStr(mention.date)}
+            {isoStrToLocalDateStr(mention.publication_year)}
           </div>
           <div className="flex-1 text-right pr-4">
-            {mention.author}
+            {mention.authors}
           </div>
         </>
       )
     }
-    if (mention.date) {
-      return isoStrToLocalDateStr(mention.date)
+    if (mention.publication_year) {
+      return isoStrToLocalDateStr(mention.publication_year)
     }
-    if (mention.author) {
-      return mention.author
+    if (mention.authors) {
+      return mention.authors
     }
   }
 
   return (
     <div>
-      {mention.type ?
+      {mention.mention_type ?
         <div className="pr-4">
-          <strong>{mentionTypeSingular[mention.type as MentionEditType]}</strong>
+          <strong>{mentionType[mention.mention_type as MentionTypeKeys].singular}</strong>
         </div>
         :null
       }

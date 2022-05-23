@@ -3,7 +3,6 @@ import LinkIcon from '@mui/icons-material/Link'
 import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
 
-import {isoStrToLocalDateStr} from '../../../../utils/dateFn'
 import {MentionForSoftware} from '../../../../types/Mention'
 
 export default function SoftwareMentionItem({item, pos, onDelete}:
@@ -31,7 +30,7 @@ export default function SoftwareMentionItem({item, pos, onDelete}:
       <div className="min-w-[1rem]">{pos+1}.</div>
       <div className='pl-4 flex-1'>
         <div>{item.title}</div>
-        <div>{isoStrToLocalDateStr(item.date)}</div>
+        <div>{item.publication_year}</div>
       </div>
       <div className="flex justify-center items-center">
         {renderLink()}

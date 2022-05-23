@@ -4,16 +4,16 @@ import List from '@mui/material/List'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 
-import {mentionType,MentionEditType} from '../../../../types/Mention'
+import {mentionType, MentionType, MentionTypeKeys} from '../../../../types/Mention'
 import mentionCountContext from './MentionCountContext'
 
 export default function SoftwareMentionCategories({category,onCategoryChange}:
-  {category:MentionEditType,onCategoryChange:(category:MentionEditType) => void}) {
+  {category:MentionTypeKeys,onCategoryChange:(category:MentionTypeKeys) => void}) {
   const {mentionCount} = useContext(mentionCountContext)
 
-  function getBadgeContent(key: string) {
-    if (mentionCount && mentionCount[key as MentionEditType]) {
-      return mentionCount[key as MentionEditType]
+  function getBadgeContent(key: MentionTypeKeys) {
+    if (mentionCount && mentionCount[key]) {
+      return mentionCount[key]
     }
     return 0
   }
@@ -28,7 +28,7 @@ export default function SoftwareMentionCategories({category,onCategoryChange}:
             key={`step-${pos}`}
             selected={key === category}
             onClick={() => {
-              onCategoryChange(key as MentionEditType)
+              onCategoryChange(key as MentionTypeKeys)
             }}
             sx={{
               padding:'0.5rem 1.5rem 0.5rem 0.5rem'
@@ -36,13 +36,13 @@ export default function SoftwareMentionCategories({category,onCategoryChange}:
           >
             <ListItemText
               primary={
-                <span>{mentionType[key as MentionEditType]}</span>
+                <span>{mentionType[key as MentionTypeKeys].plural}</span>
               }
               // secondary={`${items?.length ?? 0} items`}
             />
             <Badge
               showZero={false}
-              badgeContent={getBadgeContent(key)}
+              badgeContent={getBadgeContent(key as MentionTypeKeys)}
               color="primary"
               sx={{
                 '& .MuiBadge-badge': {

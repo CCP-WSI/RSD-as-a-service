@@ -10,6 +10,7 @@ import {
 } from './findMentionApi'
 import InputSelector, {InputAction} from './InputSelector'
 import ContentLoader from '~/components/layout/ContentLoader'
+import logger from '~/utils/logger'
 
 export default function FindMention() {
   const [mention, setMention] = useState<DoiMention>()
@@ -33,7 +34,7 @@ export default function FindMention() {
         setLoading(false)
         break
       default:
-        console.warn('Action type not implemented...', action.type)
+        logger(`Action type not implemented...${action.type}`,'warn')
     }
   }
 

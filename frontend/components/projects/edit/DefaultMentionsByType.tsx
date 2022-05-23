@@ -5,7 +5,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Badge from '@mui/material/Badge'
 import LinkIcon from '@mui/icons-material/Link'
 
-import {mentionType, MentionType, MentionForSoftware, MentionForProject} from '~/types/Mention'
+import {mentionType, MentionType, MentionForSoftware, MentionForProject, MentionTypeKeys} from '~/types/Mention'
 import {sortOnDateProp} from '~/utils/sortFn'
 import {isoStrToLocalDateStr} from '~/utils/dateFn'
 import Link from 'next/link'
@@ -20,13 +20,13 @@ export default function DefaultMentionsByType({mentionByType}: { mentionByType: 
     <>
       {mentionTypes.map((key) => {
         const items = mentionByType[key]
-        return renderMentionSectionForType(key as MentionType, items)
+        return renderMentionSectionForType(key as MentionTypeKeys, items)
       })}
     </>
   )
 }
 
-function renderMentionSectionForType(key: MentionType, items: MentionForSoftware[]) {
+function renderMentionSectionForType(key: MentionTypeKeys, items: MentionForSoftware[]) {
   // do not render accordion/section if no items
   if (items.length===0) return null
   return (
@@ -121,7 +121,7 @@ function MentionItem({item, pos}: {item: MentionForSoftware, pos:number}) {
         <div className="min-w-[1rem]">{pos}.</div>
         <div className='pl-4 flex-1'>
           <div>{item.title}</div>
-          <div>{isoStrToLocalDateStr(item.date)}</div>
+          <div>{isoStrToLocalDateStr(item.publication_year ?? '')}</div>
         </div>
         <div className="flex justify-center items-center">
           {item?.url ? <LinkIcon /> : null}

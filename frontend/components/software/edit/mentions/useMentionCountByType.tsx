@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 
-import {MentionEditType, MentionForSoftware} from '../../../../types/Mention'
+import {MentionTypeKeys, MentionForSoftware} from '../../../../types/Mention'
 import {getMentionsForSoftware} from '../../../../utils/editMentions'
 import {MentionByType} from '../../MentionsByType'
 import {initialCount,MentionCountByType} from './MentionCountContext'
@@ -11,23 +11,28 @@ function countMentionsByType(mentions:MentionForSoftware[]) {
 
   // classify mentions by type
   mentions.forEach(item => {
-    let mType = item?.type as string ?? 'default'
-    if (mentionByType?.hasOwnProperty(item.type)) {
-      mentionByType[mType].push(item)
+    // extract type
+    let mType = item?.mention_type as MentionTypeKeys ?? 'other'
+    // try to load object path
+    let mentionOfType = mentionByType[mType]
+    if (typeof mentionOfType != 'undefined') {
+      // add new item to array
+      mentionOfType.push(item)
     } else {
       // create array for new type
-      mentionByType[mType] = []
+      mentionOfType = []
       // and add this item
-      mentionByType[mType].push(item)
+      mentionOfType.push(item)
     }
   })
 
   // calculation
   Object.keys(countByType).map(key => {
-    if (mentionByType?.hasOwnProperty(key)) {
-      countByType[key as MentionEditType] = mentionByType[key].length
+    let mentionOfType = mentionByType[key as MentionTypeKeys]
+    if (typeof mentionOfType != 'undefined') {
+      countByType[key as MentionTypeKeys] = mentionOfType.length
     } else {
-      countByType[key as MentionEditType] = 0
+      countByType[key as MentionTypeKeys] = 0
     }
   })
 

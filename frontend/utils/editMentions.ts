@@ -1,17 +1,16 @@
 import {MentionByType} from '../components/software/MentionsByType'
 import {AutocompleteOption} from '../types/AutocompleteOptions'
-import {MentionItem, MentionForSoftware, MentionForProject} from '../types/Mention'
+import {MentionItem, MentionForSoftware, MentionForProject, mentionColumns, MentionTypeKeys} from '../types/Mention'
 import {createJsonHeaders, extractReturnMessage} from './fetchHelpers'
 import logger from './logger'
 
 export async function getMentionsForSoftware({software,token,frontend}:{software: string, token?: string,frontend?:boolean}) {
   try {
     // the content is order by type ascending
-    const cols ='id,date,is_featured,title,type,url,image,author'
-    let url = `${process.env.POSTGREST_URL}/mention?select=${cols},mention_for_software!inner(software)&mention_for_software.software=eq.${software}&order=type.asc`
-
+    const query = `mention?select=${mentionColumns},mention_for_software!inner(software)&mention_for_software.software=eq.${software}&order=mention_type.asc`
+    let url = `${process.env.POSTGREST_URL}/${query}`
     if (frontend) {
-      url = `/api/v1/mention?select=${cols},mention_for_software!inner(software)&mention_for_software.software=eq.${software}&order=type.asc`
+      url = `/api/v1/${query}`
     }
 
     const resp = await fetch(url, {
@@ -21,26 +20,24 @@ export async function getMentionsForSoftware({software,token,frontend}:{software
     if (resp.status === 200) {
       const data: MentionForSoftware[] = await resp.json()
       return data
-    } else if (resp.status === 404) {
-      logger(`getMentionsForSoftware: 404 [${url}]`, 'error')
-      // query not found
-      return undefined
     }
+    logger(`getMentionsForSoftware: [${resp.status}] [${url}]`, 'error')
+    // query not found
+    return []
   } catch (e: any) {
     logger(`getMentionsForSoftware: ${e?.message}`, 'error')
-    return undefined
+    return []
   }
 }
 
 export async function getMentionsForSoftwareOfType({software, type, token, frontend}:
   { software: string, type:string, token?: string, frontend?: boolean }) {
   try {
-
-    const cols = 'id,date,is_featured,title,type,url,image,author'
-    let url = `${process.env.POSTGREST_URL}/mention?select=${cols},mention_for_software!inner(software)&mention_for_software.software=eq.${software}&type=eq.${type}&order=title.asc`
+    const query = `mention?select=${mentionColumns},mention_for_software!inner(software)&mention_for_software.software=eq.${software}&type=eq.${type}&order=title.asc`
+    let url = `${process.env.POSTGREST_URL}/${query}`
 
     if (frontend) {
-      url = `/api/v1/mention?select=${cols},mention_for_software!inner(software)&mention_for_software.software=eq.${software}&type=eq.${type}&order=title.asc`
+      url = `/api/v1/${query}`
     }
 
     const resp = await fetch(url, {
@@ -50,17 +47,15 @@ export async function getMentionsForSoftwareOfType({software, type, token, front
     if (resp.status === 200) {
       const data: MentionForSoftware[] = await resp.json()
       return data
-    } else if (resp.status === 404) {
-      logger(`getMentionsForSoftwareOfType: 404 [${url}]`, 'error')
-      // query not found
-      return []
     }
+    logger(`getMentionsForSoftwareOfType: 404 [${url}]`, 'error')
+    // query not found
+    return []
   } catch (e: any) {
     logger(`getMentionsForSoftwareOfType: ${e?.message}`, 'error')
     return []
   }
 }
-
 
 /**
  * Searching for mentions in mention table which are NOT assigned to this software already.
@@ -138,7 +133,7 @@ export async function removeMentionForSoftware({mention, software, token}:
 export function mentionsToAutocompleteOptions(mentions: MentionItem[]) {
   const options:AutocompleteOption<MentionItem>[] = mentions.map((item, pos) => {
     return {
-      key: item.zotero_key ?? '',
+      key: item.doi ?? Math.random().toString(),
       label: item.title,
       data: {
         ...item,
@@ -157,18 +152,19 @@ export function clasifyMentionsByType(mentions: MentionForSoftware[]|MentionForP
     // remove array with software uuid
     // delete item.mention_for_software
     // check if type prop exists
-    let mType = item?.type as string ?? 'default'
+    let mType = item?.mention_type as MentionTypeKeys ?? 'other'
+
     // extract featured mentions
     if (item.is_featured === true) {
-      mType = 'featured'
+      // mType = 'featured'
       featuredMentions.push(item)
-    } else if (mentionByType?.hasOwnProperty(item.type)) {
-      mentionByType[mType].push(item)
+    } else if (mentionByType.hasOwnProperty(mType)) {
+      mentionByType[mType]?.push(item)
     } else {
       // create array for new type
-      mentionByType[mType] = []
+      mentionByType[mType]=[]
       // and add this item
-      mentionByType[mType].push(item)
+      mentionByType[mType]?.push(item)
     }
   })
   return {

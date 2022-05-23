@@ -5,27 +5,28 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Badge from '@mui/material/Badge'
 
 import MentionItem from './MentionItem'
-import {mentionType,MentionType,MentionForSoftware, MentionForProject} from '../../types/Mention'
+import {mentionType, MentionForSoftware, MentionForProject, MentionTypeKeys} from '../../types/Mention'
 import {sortOnDateProp} from '../../utils/sortFn'
 
 export type MentionByType={
-  [key:string]: MentionForSoftware[] | MentionForProject[]
+  [key in MentionTypeKeys]?: MentionForSoftware[] | MentionForProject[]
 }
 
 export default function MentionsByType({mentionByType}: { mentionByType: MentionByType }) {
-  const mentionTypes = Object.keys(mentionByType).sort()
+  // console.log('MentionsByType...',mentionByType)
+  const mentionTypes = Object.keys(mentionByType)
   return (
     <>
       {mentionTypes.map((key) => {
-        const items = mentionByType[key]
-        return renderMentionSectionForType(key as MentionType, items)
+        const items = mentionByType[key as MentionTypeKeys]
+        return renderMentionSectionForType(key as MentionTypeKeys, items ?? [])
       })}
     </>
   )
 }
 
 
-function renderMentionSectionForType(key: MentionType, items: MentionForSoftware[]) {
+function renderMentionSectionForType(key: MentionTypeKeys, items: MentionForSoftware[]) {
   // do not render accordion/section if no items
   if (items.length===0) return null
   return (
@@ -80,7 +81,7 @@ function renderMentionSectionForType(key: MentionType, items: MentionForSoftware
             },
           }}
         >
-          <div className="text-xl">{mentionType[key] ?? 'Other mentions'}</div>
+          <div className="text-xl">{mentionType[key].plural ?? 'Other mentions'}</div>
         </Badge>
       </AccordionSummary>
       <AccordionDetails sx={{

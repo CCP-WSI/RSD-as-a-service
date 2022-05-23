@@ -20,10 +20,10 @@ export default function ProjectImpact({session}:{session:Session}) {
 
   const {mentionByType} = clasifyMentionsByType(impact)
 
-  console.group('ProjectImpact')
-  console.log('impact...', impact)
-  console.log('mentionByType...', mentionByType)
-  console.groupEnd()
+  // console.group('ProjectImpact')
+  // console.log('impact...', impact)
+  // console.log('mentionByType...', mentionByType)
+  // console.groupEnd()
 
   if (loading) {
     return (

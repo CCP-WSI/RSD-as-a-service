@@ -1,15 +1,15 @@
 import {useState, useContext} from 'react'
 import {Alert, AlertTitle} from '@mui/material'
 
-import {MentionEditType, MentionForSoftware} from '../../../../types/Mention'
+import {MentionForSoftware, MentionType} from '../../../../types/Mention'
 import {removeMentionForSoftware} from '../../../../utils/editMentions'
 import useSnackbar from '../../../snackbar/useSnackbar'
 import ConfirmDeleteModal from '../../../layout/ConfirmDeleteModal'
 import editSoftwareContext from '../editSoftwareContext'
 import SoftwareMentionItem from './SoftwareMentionItem'
 
-export default function SoftwareMentionList({category,items,token, onDelete}:
-  {category:MentionEditType, items: MentionForSoftware[], token: string, onDelete:(pos:number)=>void}) {
+export default function SoftwareMentionList({items,token, onDelete}:
+  {items: MentionForSoftware[], token: string, onDelete:(pos:number)=>void}) {
   const {showSuccessMessage, showErrorMessage} = useSnackbar()
   const {pageState} = useContext(editSoftwareContext)
   const {software} = pageState
