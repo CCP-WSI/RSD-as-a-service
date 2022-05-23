@@ -664,6 +664,13 @@ public class Main {
 			String newType = typesThatShouldBeOther.contains(oldType) ? "other" : oldType;
 			mentionToSave.addProperty("mention_type", newType);
 			String oldUrl = nullOrValue(mentionFromLegacyRSD.get("url"));
+			//fix broken dois:
+			if (oldUrl != null && oldUrl.startsWith("https://doi.org/0")) {
+				oldUrl = oldUrl.replaceFirst("https://doi\\.org/0", "https://doi.org/10");
+			}
+			if (oldUrl != null && oldUrl.startsWith("https://doi.org/ ")) {
+				oldUrl = oldUrl.replaceFirst("https://doi\\.org/ ", "https://doi.org/");
+			}
 			if (oldUrl != null && oldUrl.startsWith("https://doi.org/")) {
 				mentionToSave.addProperty("doi", oldUrl.replaceFirst("https://doi\\.org/", ""));
 			} else {
