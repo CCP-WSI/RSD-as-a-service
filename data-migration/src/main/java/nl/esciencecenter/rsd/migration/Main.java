@@ -665,12 +665,11 @@ public class Main {
 			mentionToSave.addProperty("mention_type", newType);
 			String oldUrl = nullOrValue(mentionFromLegacyRSD.get("url"));
 			if (oldUrl != null && oldUrl.startsWith("https://doi.org/")) {
-				mentionToSave.addProperty("doi", oldUrl);
-				mentionToSave.add("url", JsonNull.INSTANCE);
+				mentionToSave.addProperty("doi", oldUrl.replaceFirst("https://doi\\.org/", ""));
 			} else {
 				mentionToSave.add("doi", JsonNull.INSTANCE);
-				mentionToSave.addProperty("url", oldUrl);
 			}
+			mentionToSave.addProperty("url", oldUrl);
 			mentionToSave.add("version", mentionFromLegacyRSD.get("version"));
 			mentionToSave.add("zotero_key", mentionFromLegacyRSD.get("zoteroKey"));
 
