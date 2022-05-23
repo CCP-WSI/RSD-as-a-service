@@ -1,25 +1,19 @@
+import logger from '~/utils/logger'
 import {CrossrefSelectItem} from '~/types/Crossref'
 import {WorkResponse} from '~/types/Datacite'
-import {crossrefItemToRawMention, getCrossrefItemByDoi, getCrossrefItemsByTitle} from '~/utils/getCrossref'
-import {dataCiteGraphQLItemToRawMention, getDataciteItemsByDoiGraphQL, getDataciteItemsByTitleGraphQL} from '~/utils/getDataCite'
-import {itemsNotInReferenceList, uniqueItems} from '~/utils/itemsNotInReferenceList'
-import logger from '~/utils/logger'
+import {
+  crossrefItemToMentionItem,
+  getCrossrefItemByDoi, getCrossrefItemsByTitle
+} from '~/utils/getCrossref'
+import {
+  dataCiteGraphQLItemToMentionItem,
+  getDataciteItemsByDoiGraphQL, getDataciteItemsByTitleGraphQL
+} from '~/utils/getDataCite'
+
 
 type DoiRA = {
   DOI: string,
   RA: string
-}
-
-export type DoiMention = {
-  doi:string,
-  title: string,
-  url: string,
-  author: string[],
-  publisher: string,
-  published: string,
-  page?:string,
-  type: string,
-  source: string
 }
 
 const exampleUrlResponse = {
@@ -80,7 +74,7 @@ async function getUrlFromDoiOrg(doi:string) {
 
 // This url will always redirect to the current url
 export function makeDoiRedirectUrl(doi: string) {
-  return `https://dx.doi.org/${doi}`
+  return `https://doi.org/${doi}`
 }
 
 
@@ -88,7 +82,7 @@ async function getItemFromCrossref(doi: string) {
   const resp = await getCrossrefItemByDoi(doi)
 
   if (resp) {
-    const mention = crossrefItemToRawMention(resp)
+    const mention = crossrefItemToMentionItem(resp)
     return mention
   }
 }
@@ -97,7 +91,7 @@ async function getItemFromDatacite(doi: string) {
   const resp = await getDataciteItemsByDoiGraphQL(doi)
 
   if (resp) {
-    const mention = dataCiteGraphQLItemToRawMention(resp)
+    const mention = dataCiteGraphQLItemToMentionItem(resp)
     return mention
   }
 }
@@ -138,31 +132,31 @@ export async function findPublicationByTitle(title: string) {
   const [crossref, datacite] = await Promise.all(promises)
   // convert responses
   const crosrefItems = crossref?.map(item => {
-    return crossrefItemToRawMention(item as CrossrefSelectItem)
+    return crossrefItemToMentionItem(item as CrossrefSelectItem)
   })
   const dataciteItems = datacite?.map(item => {
-    return dataCiteGraphQLItemToRawMention(item as WorkResponse)
+    return dataCiteGraphQLItemToMentionItem(item as WorkResponse)
   })
-  const uniqueCrossrefItems = uniqueItems({
-    list: crosrefItems ?? [],
-    key: 'doi'
-  })
-  // deduplicate on doi
-  const genuineDataciteItems = itemsNotInReferenceList({
-    list: uniqueCrossrefItems ?? [],
-    referenceList: dataciteItems ?? [],
-    key: 'doi'
-  })
+  // const uniqueCrossrefItems = uniqueItems({
+  //   list: crosrefItems ?? [],
+  //   key: 'doi'
+  // })
+  // // deduplicate on doi
+  // const genuineDataciteItems = itemsNotInReferenceList({
+  //   list: uniqueCrossrefItems ?? [],
+  //   referenceList: dataciteItems ?? [],
+  //   key: 'doi'
+  // })
   // add crossref
   if (crosrefItems) {
     publications.push(
-      ...uniqueCrossrefItems
+      ...crosrefItems
     )
   }
   // add genuine (unique) datacite items
-  if (genuineDataciteItems) {
+  if (dataciteItems) {
     publications.push(
-      ...genuineDataciteItems
+      ...dataciteItems
     )
   }
   // return results

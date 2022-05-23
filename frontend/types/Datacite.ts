@@ -76,51 +76,41 @@ export type DataciteWorksGraphQLResponse = {
 export type WorkResponse = typeof exampleWork
 
 const exampleWork = {
-  'doi': '10.5281/zenodo.5873940',
-  'type': 'Software',
-  'citationCount': 0,
-  'referenceCount': 0,
+  'doi': '10.1007/978-1-4939-9145-7_4',
+  'type': 'BookChapter',
+  'types': {
+    'resourceType': 'BookChapter',
+    'resourceTypeGeneral': 'BookChapter'
+  },
+  'sizes': [],
+  'version': null,
   'titles': [
     {
-      'title': 'GGIR'
-        }
+      'title': 'CellProfiler and KNIME: Open-Source Tools for High-Content Screening'
+    }
   ],
-  'descriptions': [
-    {
-      'description': 'Converts raw data from wearables into insightful reports for researchers investigating human daily physical activity and sleep.'
-        }
-  ],
-  'publisher': 'Zenodo',
-  'publicationYear': 2022,
+  'publisher': 'Springer Science and Business Media LLC',
+  'publicationYear': 2019,
   'creators': [
     {
-      'givenName': 'Vincent',
-      'familyName': 'van Hees',
-      'affiliation': [
-        {
-          'name': 'Netherlands eScience Center'
-            }
-      ]
+      'givenName': 'Martin',
+      'familyName': 'Steiter',
+      'affiliation': []
     },
     {
-      'givenName': 'Zhou',
-      'familyName': 'Fang',
-      'affiliation': [
-        {
-          'name': 'Activinsights Ltd.'
-            }
-      ]
+      'givenName': 'Antje',
+      'familyName': 'Janosch',
+      'affiliation': []
     }
   ],
   'contributors': [{
-    'givenName': 'Jairo H.',
-    'familyName': 'Migueles',
-    'affiliation': [
-      {
-        'name': 'University of Granada'
-          }
-    ]
-  }],
-  'versionCount': 0,
-  'versionOfCount': 1
+    'givenName': 'Rico',
+    'familyName': 'Barsacchi',
+    'affiliation': []
+  },
+    {
+      'givenName': 'Marc',
+      'familyName': 'Bickle',
+      'affiliation': []
+    }]
 }

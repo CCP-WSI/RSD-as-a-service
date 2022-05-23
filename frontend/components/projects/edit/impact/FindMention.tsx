@@ -4,17 +4,17 @@ import {ListItem, ListItemText} from '@mui/material'
 import List from '@mui/material/List'
 
 import {
-  DoiMention,
   extractMentionFromDoi,
   findPublicationByTitle
 } from './findMentionApi'
 import InputSelector, {InputAction} from './InputSelector'
 import ContentLoader from '~/components/layout/ContentLoader'
 import logger from '~/utils/logger'
+import {MentionItem, mentionType} from '~/types/Mention'
 
 export default function FindMention() {
-  const [mention, setMention] = useState<DoiMention>()
-  const [publications, setPublications] = useState<DoiMention[]>([])
+  const [mention, setMention] = useState<MentionItem>()
+  const [publications, setPublications] = useState<MentionItem[]>([])
   const [actionType, setActionType] = useState<string>()
   const [loading, setLoading] = useState(false)
 
@@ -23,13 +23,13 @@ export default function FindMention() {
     switch (action.type) {
       case 'doi':
         const mention = await extractMentionFromDoi(action.value)
-        setMention(mention as DoiMention)
+        setMention(mention as MentionItem)
         setActionType(action.type)
         setLoading(false)
         break
       case 'title':
         const publications = await findPublicationByTitle(action.value)
-        setPublications(publications as DoiMention[])
+        setPublications(publications as MentionItem[])
         setActionType(action.type)
         setLoading(false)
         break
@@ -70,17 +70,17 @@ export default function FindMention() {
               <ListItemText
                 primary={
                   <div className="flex justify-between">
-                    <a href={item.url} target="_blank" rel="noreferrer">{item.title}</a>
+                    <a href={item.url ?? ''} target="_blank" rel="noreferrer">{item.title}</a>
                     <span className="pl-4 text-grey-500">{item.source}</span>
                   </div>
                 }
                 secondary={
                   <span className="flex justify-between">
                     <div>
-                      <span>{item.type}</span> DOI:<span>{item.doi}</span>
+                      <span>{mentionType[item.mention_type].singular}</span> DOI:<span>{item.doi}</span>
                     </div>
                     <div className="pl-4 text-right">
-                      <span>{item.publisher}</span>, <span>{item.published}</span>
+                      <span>{item.publisher}</span>, <span>{item.publication_year}</span>
                     </div>
                   </span>
                 } />

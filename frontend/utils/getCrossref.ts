@@ -1,5 +1,7 @@
-import {DoiMention} from '~/components/projects/edit/impact/findMentionApi'
+import {makeDoiRedirectUrl} from '~/components/projects/edit/impact/findMentionApi'
 import {CrossrefResponse, CrossrefSelectItem, crossrefSelectProps, crossrefType} from '~/types/Crossref'
+import {MentionItem} from '~/types/Mention'
+import {apiMentionTypeToRSDTypeKey} from './editMentions'
 import logger from './logger'
 
 
@@ -7,9 +9,9 @@ function extractAuthors(item: CrossrefSelectItem) {
   if (item.author) {
     return item.author.map(author => {
       return `${author.given} ${author.family}`
-    })
+    }).join(',')
   }
-  return []
+  return ''
 }
 
 function extractTypeLabel(type: string) {
@@ -33,16 +35,20 @@ function extractYearPublished(item: CrossrefSelectItem) {
   return ''
 }
 
-export function crossrefItemToRawMention(item: CrossrefSelectItem) {
-  const mention: DoiMention = {
+export function crossrefItemToMentionItem(item: CrossrefSelectItem) {
+  const mention: MentionItem = {
+    id: null,
     doi: item.DOI,
+    url: makeDoiRedirectUrl(item.DOI),
     title: item.title,
-    url: item.URL,
-    author: extractAuthors(item),
+    authors: extractAuthors(item),
     publisher: item.publisher,
     // extract only Year
-    published: extractYearPublished(item),
-    type: extractTypeLabel(item.type),
+    publication_year: extractYearPublished(item),
+    page: item.page ?? null,
+    image_url: null,
+    is_featured: false,
+    mention_type: apiMentionTypeToRSDTypeKey(item.type),
     source: 'Crossref'
   }
   return mention

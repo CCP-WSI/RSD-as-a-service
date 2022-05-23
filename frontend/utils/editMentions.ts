@@ -1,6 +1,9 @@
 import {MentionByType} from '../components/software/MentionsByType'
 import {AutocompleteOption} from '../types/AutocompleteOptions'
-import {MentionItem, MentionForSoftware, MentionForProject, mentionColumns, MentionTypeKeys} from '../types/Mention'
+import {
+  MentionItem, MentionForSoftware,
+  MentionForProject, mentionColumns, MentionTypeKeys
+} from '../types/Mention'
 import {createJsonHeaders, extractReturnMessage} from './fetchHelpers'
 import logger from './logger'
 
@@ -170,5 +173,55 @@ export function clasifyMentionsByType(mentions: MentionForSoftware[]|MentionForP
   return {
     mentionByType,
     featuredMentions
+  }
+}
+
+
+export function apiMentionTypeToRSDTypeKey(type: string): MentionTypeKeys {
+  switch (type.toLowerCase()) {
+    case 'blog-post':
+      return 'blogPost'
+    case 'book-set':
+    case 'book-series':
+    case 'book-track':
+    case 'book':
+      return 'book'
+    case 'book-part':
+    case 'book-chapter':
+    case 'book-section':
+    case 'book chapter':
+      return 'bookSection'
+    case 'conference-paper':
+      return 'conferencePaper'
+    case 'dataset':
+      return 'dataset'
+    case 'interview':
+      return 'interview'
+    case 'journal':
+    case 'journal-article':
+    case 'journal-volume':
+    case 'journal-issue':
+    case 'journal article':
+      return 'journalArticle'
+    case 'magazine-article':
+      return 'magazineArticle'
+    case 'newspaper-article':
+      return 'newspaperArticle'
+    case 'presentation':
+      return 'presentation'
+    case 'report-series':
+    case 'report':
+      return 'report'
+    case 'software':
+    case 'computer-program':
+      return 'computerProgram'
+    case 'thesis':
+      return 'thesis'
+    case 'video-recording':
+      return 'videoRecording'
+    case 'webpage':
+      return 'webpage'
+    default:
+      return 'other'
   }
 }

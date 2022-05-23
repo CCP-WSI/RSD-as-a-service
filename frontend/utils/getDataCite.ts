@@ -1,6 +1,8 @@
-import {DoiMention, makeDoiRedirectUrl} from '~/components/projects/edit/impact/findMentionApi'
+import {makeDoiRedirectUrl} from '~/components/projects/edit/impact/findMentionApi'
 import {DataciteWorkGraphQLResponse, DataciteWorksGraphQLResponse, WorkResponse} from '~/types/Datacite'
+import {MentionItem} from '~/types/Mention'
 import {createJsonHeaders} from './fetchHelpers'
+import {apiMentionTypeToRSDTypeKey} from './editMentions'
 import logger from './logger'
 
 function graphQLDoiQuery(doi:string) {
@@ -8,8 +10,8 @@ function graphQLDoiQuery(doi:string) {
     work(id: "${doi}"){
       doi,
       type,
-      citationCount,
-      referenceCount,
+      sizes,
+    	version,
       titles(first: 1){
         title
       },
@@ -94,17 +96,32 @@ function gqlWorksByTitleQuery(title: string) {
   return gql
 }
 
-export function dataCiteGraphQLItemToRawMention(item: WorkResponse) {
-  const mention: DoiMention = {
+function extractAuthors(item: WorkResponse) {
+  const authors = item.creators.map(author => {
+    return `${author.givenName} ${author.familyName}`
+  })
+  item.contributors.forEach(author => {
+    authors.push(`${author.givenName} ${author.familyName}`)
+  })
+  if (authors.length > 0) {
+    return authors.join(', ')
+  }
+  return ''
+}
+
+export function dataCiteGraphQLItemToMentionItem(item: WorkResponse) {
+  const mention: MentionItem = {
+    id: null,
     doi: item.doi,
-    title: item.titles[0].title,
     url: makeDoiRedirectUrl(item.doi),
-    author: item.creators.map(author => {
-      return `${author.givenName} ${author.familyName}`
-    }),
+    title: item.titles[0].title,
+    authors: extractAuthors(item),
     publisher: item.publisher,
-    published: item.publicationYear.toString(),
-    type: item.type,
+    publication_year: item.publicationYear.toString(),
+    page: null,
+    image_url: null,
+    is_featured: false,
+    mention_type: apiMentionTypeToRSDTypeKey(item.type),
     source: 'DataCite'
   }
   return mention

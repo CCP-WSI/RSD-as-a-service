@@ -125,9 +125,9 @@ export type MentionType = {
 
 // as in mention table
 export type MentionItem = {
-  id: string
-  doi: string | null,
-  url: string | null,
+  id: string | null
+  doi: string | null
+  url: string | null
   title: string
   authors: string | null
   publisher: string | null

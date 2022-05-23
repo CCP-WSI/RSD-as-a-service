@@ -206,123 +206,123 @@ export const crossrefType = {
 
 // crossref metadata types
 // as received from https://api.crossref.org/types
-const crossrefTypes = [
-  {
-    'id': 'book-section',
-    'label': 'Book Section'
-  },
-  {
-    'id': 'monograph',
-    'label': 'Monograph'
-  },
-  {
-    'id': 'report',
-    'label': 'Report'
-  },
-  {
-    'id': 'peer-review',
-    'label': 'Peer Review'
-  },
-  {
-    'id': 'book-track',
-    'label': 'Book Track'
-  },
-  {
-    'id': 'journal-article',
-    'label': 'Journal Article'
-  },
-  {
-    'id': 'book-part',
-    'label': 'Part'
-  },
-  {
-    'id': 'other',
-    'label': 'Other'
-  },
-  {
-    'id': 'book',
-    'label': 'Book'
-  },
-  {
-    'id': 'journal-volume',
-    'label': 'Journal Volume'
-  },
-  {
-    'id': 'book-set',
-    'label': 'Book Set'
-  },
-  {
-    'id': 'reference-entry',
-    'label': 'Reference Entry'
-  },
-  {
-    'id': 'proceedings-article',
-    'label': 'Proceedings Article'
-  },
-  {
-    'id': 'journal',
-    'label': 'Journal'
-  },
-  {
-    'id': 'component',
-    'label': 'Component'
-  },
-  {
-    'id': 'book-chapter',
-    'label': 'Book Chapter'
-  },
-  {
-    'id': 'proceedings-series',
-    'label': 'Proceedings Series'
-  },
-  {
-    'id': 'report-series',
-    'label': 'Report Series'
-  },
-  {
-    'id': 'proceedings',
-    'label': 'Proceedings'
-  },
-  {
-    'id': 'standard',
-    'label': 'Standard'
-  },
-  {
-    'id': 'reference-book',
-    'label': 'Reference Book'
-  },
-  {
-    'id': 'posted-content',
-    'label': 'Posted Content'
-  },
-  {
-    'id': 'journal-issue',
-    'label': 'Journal Issue'
-  },
-  {
-    'id': 'dissertation',
-    'label': 'Dissertation'
-  },
-  {
-    'id': 'grant',
-    'label': 'Grant'
-  },
-  {
-    'id': 'dataset',
-    'label': 'Dataset'
-  },
-  {
-    'id': 'book-series',
-    'label': 'Book Series'
-  },
-  {
-    'id': 'edited-book',
-    'label': 'Edited Book'
-  },
-  {
-    'id': 'standard-series',
-    'label': 'Standard Series'
-  }
-]
+// const crossrefTypes = [
+//   {
+//     'id': 'book-section',
+//     'label': 'Book Section'
+//   },
+//   {
+//     'id': 'monograph',
+//     'label': 'Monograph'
+//   },
+//   {
+//     'id': 'report',
+//     'label': 'Report'
+//   },
+//   {
+//     'id': 'peer-review',
+//     'label': 'Peer Review'
+//   },
+//   {
+//     'id': 'book-track',
+//     'label': 'Book Track'
+//   },
+//   {
+//     'id': 'journal-article',
+//     'label': 'Journal Article'
+//   },
+//   {
+//     'id': 'book-part',
+//     'label': 'Part'
+//   },
+//   {
+//     'id': 'other',
+//     'label': 'Other'
+//   },
+//   {
+//     'id': 'book',
+//     'label': 'Book'
+//   },
+//   {
+//     'id': 'journal-volume',
+//     'label': 'Journal Volume'
+//   },
+//   {
+//     'id': 'book-set',
+//     'label': 'Book Set'
+//   },
+//   {
+//     'id': 'reference-entry',
+//     'label': 'Reference Entry'
+//   },
+//   {
+//     'id': 'proceedings-article',
+//     'label': 'Proceedings Article'
+//   },
+//   {
+//     'id': 'journal',
+//     'label': 'Journal'
+//   },
+//   {
+//     'id': 'component',
+//     'label': 'Component'
+//   },
+//   {
+//     'id': 'book-chapter',
+//     'label': 'Book Chapter'
+//   },
+//   {
+//     'id': 'proceedings-series',
+//     'label': 'Proceedings Series'
+//   },
+//   {
+//     'id': 'report-series',
+//     'label': 'Report Series'
+//   },
+//   {
+//     'id': 'proceedings',
+//     'label': 'Proceedings'
+//   },
+//   {
+//     'id': 'standard',
+//     'label': 'Standard'
+//   },
+//   {
+//     'id': 'reference-book',
+//     'label': 'Reference Book'
+//   },
+//   {
+//     'id': 'posted-content',
+//     'label': 'Posted Content'
+//   },
+//   {
+//     'id': 'journal-issue',
+//     'label': 'Journal Issue'
+//   },
+//   {
+//     'id': 'dissertation',
+//     'label': 'Dissertation'
+//   },
+//   {
+//     'id': 'grant',
+//     'label': 'Grant'
+//   },
+//   {
+//     'id': 'dataset',
+//     'label': 'Dataset'
+//   },
+//   {
+//     'id': 'book-series',
+//     'label': 'Book Series'
+//   },
+//   {
+//     'id': 'edited-book',
+//     'label': 'Edited Book'
+//   },
+//   {
+//     'id': 'standard-series',
+//     'label': 'Standard Series'
+//   }
+// ]
 
-type CrossrefTypes = typeof crossrefTypes
+// type CrossrefTypes = typeof crossrefTypes
