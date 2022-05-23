@@ -43,8 +43,8 @@ CREATE TYPE mention_type AS ENUM (
 
 CREATE TABLE mention (
 	id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  doi VARCHAR(255) UNIQUE,
-	url VARCHAR(500) UNIQUE,
+	doi VARCHAR(255) UNIQUE,
+	url VARCHAR(500),
 	title VARCHAR(500) NOT NULL,
 	authors VARCHAR(1000),
 	publisher VARCHAR(255),
@@ -53,8 +53,8 @@ CREATE TABLE mention (
 	image_url VARCHAR(500),
 	is_featured BOOLEAN DEFAULT FALSE NOT NULL,
 	mention_type mention_type NOT NULL,
-  source VARCHAR(50) NOT NULL,
-  version INTEGER,
+	source VARCHAR(50) NOT NULL,
+	version INTEGER,
 	zotero_key VARCHAR UNIQUE,
 	scraped_at TIMESTAMP,
 	created_at TIMESTAMP NOT NULL,
