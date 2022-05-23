@@ -23,3 +23,33 @@ export function itemsNotInReferenceList<T>({list, referenceList, key}:
   }
   return []
 }
+
+
+export function uniqueListItems<T>({list, key}:
+  { list: T[], key: keyof T }) {
+  if (list.length > 0) {
+    // items not present in refrence list should be removed from db
+    const itemsNotInReferenceList = list.filter(item => {
+      const lId = item[key]
+      // if item cannot be found in reference
+      return !list.some(item => {
+        const rId = item[key]
+        // compare inital item with items in saveList
+        return lId === rId
+      })
+    })
+    return itemsNotInReferenceList
+  }
+  return []
+}
+
+
+export function uniqueItems<T>({list, key}:
+  { list: T[], key: keyof T }) {
+  if (list.length > 0) {
+    const arrUniq = [...new Map(list.map(item => [item[key], item])).values()]
+    debugger
+    return arrUniq
+  }
+  return []
+}

@@ -9,6 +9,8 @@ import useProjectContext from '../useProjectContext'
 import useImpactForProject from './useImpactForProject'
 import DefaultMentionsByType from '../DefaultMentionsByType'
 
+import FindMention from './FindMention'
+
 export default function ProjectImpact({session}:{session:Session}) {
   const {project} = useProjectContext()
   const {impact, loading} = useImpactForProject({
@@ -29,6 +31,7 @@ export default function ProjectImpact({session}:{session:Session}) {
     )
   }
 
+
   return (
     <EditSection className='xl:grid xl:grid-cols-[1fr,1fr] xl:px-0 xl:gap-[3rem]'>
       <div className="py-4 xl:pl-[3rem]">
@@ -43,7 +46,7 @@ export default function ProjectImpact({session}:{session:Session}) {
         />
       </div>
       <div className="py-4 min-w-[21rem] xl:my-0">
-        <h2>Find mention</h2>
+        <FindMention />
       </div>
     </EditSection>
   )
