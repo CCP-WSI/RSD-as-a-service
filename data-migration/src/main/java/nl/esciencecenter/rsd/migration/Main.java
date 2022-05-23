@@ -641,6 +641,11 @@ public class Main {
 		post(URI.create(POSTGREST_URI + "/project_for_project"), allRelationsToSave.toString());
 	}
 
+	public static String nullOrValue(JsonElement jsonElement) {
+		return jsonElement == null || jsonElement.isJsonNull() || !jsonElement.isJsonPrimitive() ? null :
+				jsonElement.getAsString();
+	}
+
 	public static void saveMentions(JsonArray allMentionsFromLegacyRSD) {
 		JsonArray allMentionsToSave = new JsonArray();
 		allMentionsFromLegacyRSD.forEach(jsonElement -> {
@@ -658,7 +663,14 @@ public class Main {
 			Set<String> typesThatShouldBeOther = Set.of("attachment", "document", "manuscript", "note", "radioBroadcast");
 			String newType = typesThatShouldBeOther.contains(oldType) ? "other" : oldType;
 			mentionToSave.addProperty("mention_type", newType);
-			mentionToSave.add("url", mentionFromLegacyRSD.get("url"));
+			String oldUrl = nullOrValue(mentionFromLegacyRSD.get("url"));
+			if (oldUrl != null && oldUrl.startsWith("https://doi.org/")) {
+				mentionToSave.addProperty("doi", oldUrl);
+				mentionToSave.add("url", JsonNull.INSTANCE);
+			} else {
+				mentionToSave.add("doi", JsonNull.INSTANCE);
+				mentionToSave.addProperty("url", oldUrl);
+			}
 			mentionToSave.add("version", mentionFromLegacyRSD.get("version"));
 			mentionToSave.add("zotero_key", mentionFromLegacyRSD.get("zoteroKey"));
 
