@@ -49,6 +49,7 @@ CREATE TABLE mention (
 	authors VARCHAR(1000),
 	publisher VARCHAR(255),
 	publication_year VARCHAR(4),
+	page VARCHAR(50),
 	image_url VARCHAR(500),
 	is_featured BOOLEAN DEFAULT FALSE NOT NULL,
 	mention_type mention_type NOT NULL,
